@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mercado Virtual</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .producto {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+    }
+    #resumen-carrito {
+      margin-top: 30px;
+      padding: 15px;
+      border: 1px solid #888;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      white-space: pre-wrap;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    button {
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Mercado Virtual</h1>
+    <div id="carrito">Carrito: <span id="carrito-contador">0</span> productos</div>
+  </header>
+
+  <main>
+    <div class="producto">
+      <h2>Manzanas</h2>
+      <p>Precio: $10</p>
+      <button onclick="agregarAlCarrito('Manzanas')">Agregar al carrito</button>
+    </div>
+    <div class="producto">
+      <h2>Plátanos</h2>
+      <p>Precio: $12</p>
+      <button onclick="agregarAlCarrito('Plátanos')">Agregar al carrito</button>
+    </div>
+    <div class="producto">
+      <h2>Pan</h2>
+      <p>Precio: $15</p>
+      <button onclick="agregarAlCarrito('Pan')">Agregar al carrito</button>
+    </div>
+    <div class="producto">
+      <h2>Leche</h2>
+      <p>Precio: $20</p>
+      <button onclick="agregarAlCarrito('Leche')">Agregar al carrito</button>
+    </div>
+    <div class="producto">
+      <h2>Huevos</h2>
+      <p>Precio: $22</p>
+      <button onclick="agregarAlCarrito('Huevos')">Agregar al carrito</button>
+    </div>
+    <div class="producto">
+      <h2>Arroz</h2>
+      <p>Precio: $18</p>
+      <button onclick="agregarAlCarrito('Arroz')">Agregar al carrito</button>
+    </div>
+    <div class="producto">
+      <h2>Frijoles</h2>
+      <p>Precio: $19</p>
+      <button onclick="agregarAlCarrito('Frijoles')">Agregar al carrito</button>
+    </div>
+    <div class="producto">
+      <h2>Queso</h2>
+      <p>Precio: $25</p>
+      <button onclick="agregarAlCarrito('Queso')">Agregar al carrito</button>
+    </div>
+    <div class="producto">
+      <h2>Yogur</h2>
+      <p>Precio: $14</p>
+      <button onclick="agregarAlCarrito('Yogur')">Agregar al carrito</button>
+    </div>
+    <div class="producto">
+      <h2>Jugo</h2>
+      <p>Precio: $16</p>
+      <button onclick="agregarAlCarrito('Jugo')">Agregar al carrito</button>
+    </div>
+  </main>
+
+  <div id="resumen-carrito">
+    Resumen del carrito: (vacío)
+  </div>
+  <button onclick="vaciarCarrito()">Vaciar carrito</button>
+
+  <script>
+    const precios = {
+      Manzanas: 10,
+      Plátanos: 12,
+      Pan: 15,
+      Leche: 20,
+      Huevos: 22,
+      Arroz: 18,
+      Frijoles: 19,
+      Queso: 25,
+      Yogur: 14,
+      Jugo: 16
+    };
+
+    let carrito = {};
+    let totalProductos = 0;
+
+    function agregarAlCarrito(producto) {
+      if (carrito[producto]) {
+        carrito[producto]++;
+      } else {
+        carrito[producto] = 1;
+      }
+
+      totalProductos++;
+      actualizarContador();
+      mostrarResumenCarrito();
+    }
+
+    function eliminarDelCarrito(producto) {
+      if (carrito[producto]) {
+        carrito[producto]--;
+        totalProductos--;
+
+        if (carrito[producto] <= 0) {
+          delete carrito[producto];
+        }
+
+        actualizarContador();
+        mostrarResumenCarrito();
+      }
+    }
+
+    function vaciarCarrito() {
+      carrito = {};
+      totalProductos = 0;
+      actualizarContador();
+      mostrarResumenCarrito();
+    }
+
+    function actualizarContador() {
+      document.getElementById('carrito-contador').textContent = totalProductos;
+    }
+
+    function mostrarResumenCarrito() {
+      const resumenDiv = document.getElementById("resumen-carrito");
+
+      if (totalProductos === 0) {
+        resumenDiv.textContent = "Resumen del carrito: (vacío)";
+        return;
+      }
+
+      let resumen = "<strong>Resumen del carrito:</strong><br/>";
+      let total = 0;
+
+      for (let producto in carrito) {
+        const cantidad = carrito[producto];
+        const precio = precios[producto];
+        const subtotal = cantidad * precio;
+
+        resumen += `${producto}: ${cantidad} x $${precio} = $${subtotal} `;
+        resumen += <button onclick="eliminarDelCarrito('${producto}')">Eliminar</button><br/>;
+        total += subtotal;
+      }
+
+      resumen += <br/><strong>Total a pagar: $${total}</strong>;
+      resumenDiv.innerHTML = resumen;
+    }
+  </script>
+</body>
+</html>
